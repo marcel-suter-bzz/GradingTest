@@ -1,0 +1,14 @@
+{
+  "tests": [
+    {
+      "name": "Autograding",
+      "setup": "",
+      "run": "python3 main.py",
+      "input": "",
+      "output": "Total: 78.75\n",
+      "comparison": "included",
+      "timeout": 1,
+      "points": 1
+    }
+  ]
+}
