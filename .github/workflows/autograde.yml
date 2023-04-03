@@ -49,6 +49,7 @@ jobs:
       run: python ${{ env.DEVOPS_DIR }}/issues.py
       shell: sh
   copy-testdata:
+    if: ${{ contains(github.actor, 'classroom') }}
     permissions: write-all
     name: Setup test data
     runs-on: ubuntu-latest
