@@ -29,11 +29,13 @@ jobs:
       - name: export-grade
         if: always()
         run: |
+          grade=${{ steps.autograding.outputs.Points }}
+          parts=$(echo $grade | tr "/" "\n")
           wstoken="wstoken=f687ce33493a389d875c8c6c8288a7d6"
           wsfunction="wsfunction=local_gradeassignments_update_grade"
           assignment="assignment_name=M293_LU07_A01_Book"
-          user="user_name=ghwalin"
-          points="points=${{ steps.autograding.outputs.Points }}"
+          user="user_name=${{ github.actor }}"
+          points="points=$parts[0]"
           url="https://it.bzz.ch/demo/formdata/index.php?$wstoken&$wsfunction&$assignment&$user&$points"
           echo $url
           #curl -X POST "https://it.bzz.ch/fgitapi/gh_grade/${{ github.repository }}/${{ steps.autograding.outputs.Points }}"
