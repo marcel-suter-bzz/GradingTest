@@ -29,12 +29,10 @@ jobs:
           parts=(${repofull//\// })
           reponame=${parts[1]}
           assignment="${reponame/"-$user"/""}"
-          echo $assignment
 
           wstoken="wstoken=f687ce33493a389d875c8c6c8288a7d6"
           wsfunction="wsfunction=local_gradeassignments_update_grade"
-          assignment="assignment_name=M293_LU07_A01_Book"
+          assignment="assignment_name=$assignment"
           
           url="https://it.bzz.ch/demo/formdata/index.php?$wstoken&$wsfunction&$assignment&$user&$points"
-          echo $url
-          #curl -X POST "https://it.bzz.ch/fgitapi/gh_grade/${{ github.repository }}/${{ steps.autograding.outputs.Points }}"
+          curl $url
