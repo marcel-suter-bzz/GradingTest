@@ -2,15 +2,7 @@ name: GitHub Classroom Workflow
 
 on: [push]
 
-env:
-  DEVOPS_DIR: devops
-  GHSECRET: ${{ secrets.GITHUB_TOKEN }}
-  TARGET_REPO: ${{ github.repository }}
-  SOURCE_REPO: BZZ-Commons/copy-issues
-  SCRIPT_REPO: BZZ-Commons/copy-issues
-  ADD_LABELS: "true"
-  DATA_REPO: BZZ-Commons/set-testdata
-  DATA_PATH: 'FIXME url'
+
 
 permissions:
   checks: write
