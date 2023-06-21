@@ -2,8 +2,6 @@ name: GitHub Classroom Workflow
 
 on: [push]
 
-
-
 permissions:
   checks: write
   actions: read
@@ -24,7 +22,13 @@ jobs:
           grade=${{ steps.autograding.outputs.Points }}
           parts=(${grade//\// })
           points="points=${parts[0]}"
-          parts=$(echo $grade | tr "/" "\n")
+          
+          repofull=${{ github.repository }}
+          parts=(${repofull//\// })
+          reponame=${parts[1])
+          foo=(${reponame//-/ })
+          bar=${foo[0]}
+
           wstoken="wstoken=f687ce33493a389d875c8c6c8288a7d6"
           wsfunction="wsfunction=local_gradeassignments_update_grade"
           assignment="assignment_name=M293_LU07_A01_Book"
