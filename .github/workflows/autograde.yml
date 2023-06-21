@@ -25,7 +25,7 @@ jobs:
           
           repofull=${{ github.repository }}
           parts=(${repofull//\// })
-          reponame=${parts[1])
+          reponame=${parts[1]}
           foo=(${reponame//-/ })
           bar=${foo[0]}
 
