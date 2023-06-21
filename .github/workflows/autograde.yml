@@ -2,16 +2,6 @@ name: GitHub Classroom Workflow
 
 on: [push]
 
-env:
-  DEVOPS_DIR: devops
-  GHSECRET: ${{ secrets.GITHUB_TOKEN }}
-  TARGET_REPO: ${{ github.repository }}
-  SOURCE_REPO: BZZ-Commons/copy-issues
-  SCRIPT_REPO: BZZ-Commons/copy-issues
-  ADD_LABELS: "true"
-  DATA_REPO: BZZ-Commons/set-testdata
-  DATA_PATH: 'FIXME url'
-
 permissions:
   checks: write
   actions: read
@@ -29,10 +19,19 @@ jobs:
       - name: export-grade
         if: always()
         run: |
+          grade=${{ steps.autograding.outputs.Points }}
+          parts=(${grade//\// })
+          points="points=${parts[0]}"
+          
+          repofull=${{ github.repository }}
+          parts=(${repofull//\// })
+          reponame=${parts[1]}
+          assignment="${reponame/"-${{ github.actor }}"/""}"
+
           wstoken="wstoken=f687ce33493a389d875c8c6c8288a7d6"
           wsfunction="wsfunction=local_gradeassignments_update_grade"
-          assignment="assignment_name=M293_LU07_A01_Book"
-          user="user_name=ghwalin"
-          points="points=${{ steps.autograding.outputs.Points }}"
+          assignment="assignment_name=$assignment"
+          user="user_name=${{ github.actor }}"
+          
           url="https://it.bzz.ch/demo/formdata/index.php?$wstoken&$wsfunction&$assignment&$user&$points"
-          #curl -X POST "https://it.bzz.ch/fgitapi/gh_grade/${{ github.repository }}/${{ steps.autograding.outputs.Points }}"
+          curl $url
