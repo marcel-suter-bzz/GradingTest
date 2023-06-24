@@ -2,6 +2,10 @@ name: GitHub Classroom Workflow
 
 on: [push]
 
+env:
+  DEVOPS_DIR: devops
+  GHSECRET: ${{ secrets.GITHUB_TOKEN }}
+
 permissions:
   checks: write
   actions: read
@@ -9,14 +13,19 @@ permissions:
 
 jobs:
   grading:
+    # autograding an assignment in GitHub Classroom
+    # does not run for the first push by the classroom bot
     if: ${{ !contains(github.actor, 'classroom') }}
     name: Autograding
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        # checkout the content of the repository
       - uses: education/autograding@v1
+        # run the test cases in .github/classroom/autograding.json
         id: autograding
-      - name: export-grade
+      - name: grade-moodle-assignment
+        # grade the assignment in Moodle, runs even after an error in autograding
         if: always()
         run: |
           grade=${{ steps.autograding.outputs.Points }}
@@ -35,3 +44,53 @@ jobs:
           
           url="https://it.bzz.ch/demo/formdata/index.php?$wstoken&$wsfunction&$assignment&$user&$points"
           curl $url
+  copy-issues:
+    # copy all issues from the template to the students repo
+    env:
+      DEVOPS_DIR: devops
+      GHSECRET: ${{ secrets.GITHUB_TOKEN }}
+      SCRIPT_REPO: BZZ-Commons/copy-issues
+      SOURCE_REPO: BZZ-Commons/copy-issues  # TODO set the owner/name of the source repo
+      TARGET_REPO: ${{ github.repository }}
+      ADD_LABELS: "true"  # should the labels for the issues be added
+    if: ${{ contains(github.actor, 'classroom') }}
+    name: CopyIssues
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyGithub
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Check-out the IssueCopy Repo
+      uses: actions/checkout@v2
+      with:
+        repository: ${{ env.SCRIPT_REPO }}
+        path: ${{ env.DEVOPS_DIR }}
+    - name: Copy the Issues
+      run: python ${{ env.DEVOPS_DIR }}/issues.py
+      shell: sh
+  copy-testdata:
+    # copy testdata for the grading (used for marked assignments with individual values)
+    env:
+      DEVOPS_DIR: devops
+      DATA_REPO: BZZ-Commons/set-testdata
+      DATA_PATH: 'FIXME url' # the csv-file with the test data
+    if: ${{ contains(github.actor, 'classroom') }}
+    permissions: write-all
+    name: Setup test data
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyGithub
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Check-out the TestData Repo
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ env.DATA_REPO }}
+          path: ${{ env.DEVOPS_DIR }}
+      - name: Copy the test data
+        run: python ${{ env.DEVOPS_DIR }}/main.py
+        shell: sh
