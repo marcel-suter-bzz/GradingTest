@@ -31,18 +31,18 @@ jobs:
           grade=${{ steps.autograding.outputs.Points }}
           parts=(${grade//\// })
           points="points=${parts[0]}"
+          user="user_name=${{ github.actor }}"
+          wsfunction="wsfunction=local_gradeassignments_update_grade"
           
           repofull=${{ github.repository }}
           parts=(${repofull//\// })
           reponame=${parts[1]}
-          assignment="${reponame/"-${{ github.actor }}"/""}"
-
-          wstoken="wstoken=f687ce33493a389d875c8c6c8288a7d6"
-          wsfunction="wsfunction=local_gradeassignments_update_grade"
-          assignment="assignment_name=$assignment"
-          user="user_name=${{ github.actor }}"
+          template="${reponame/"-${{ github.actor }}"/""}"
+          assignment="assignment_name=$template"
           
-          url="https://it.bzz.ch/demo/formdata/index.php?$wstoken&$wsfunction&$assignment&$user&$points"
+          
+          wstoken="wstoken=${{ secrets.MOODLE_TOKEN }}"
+          url="${{ vars.MOODLE_URL}}?$wstoken&$wsfunction&$assignment&$user&$points"
           curl $url
 
   copy-issues:
