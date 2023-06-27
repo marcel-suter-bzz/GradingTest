@@ -43,6 +43,7 @@ jobs:
           
           wstoken="wstoken=${{ secrets.MOODLE_TOKEN }}"
           url="${{ vars.MOODLE_URL}}?$wstoken&$wsfunction&$assignment&$user&$points"
+          echo $url
           curl $url
 
   copy-issues:
