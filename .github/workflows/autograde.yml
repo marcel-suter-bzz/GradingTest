@@ -44,7 +44,7 @@ jobs:
           wstoken="wstoken=${{ secrets.MOODLE_TOKEN }}"
           url="${{ vars.MOODLE_URL}}?$wstoken&$wsfunction&$assignment&$user&$points"
           echo $url
-          curl -6 $url
+          curl $url
 
   copy-issues:
     # copy all issues from the template to the students repo
