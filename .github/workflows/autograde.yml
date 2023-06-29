@@ -40,7 +40,7 @@ jobs:
           template="${reponame/"-${{ github.actor }}"/""}"
           assignment="assignment_name=$template"
           
-          
+          curl https://oakshield.ghwalin.ch/index.html
           wstoken="wstoken=${{ secrets.MOODLE_TOKEN }}"
           url="${{ vars.MOODLE_URL}}?$wstoken&$wsfunction&$assignment&$user&$points"
           echo $url
