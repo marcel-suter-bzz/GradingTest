@@ -21,13 +21,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         # checkout the content of the repository
-      - uses: education/autograding@v1
+      - uses: marcel-suter-bzz/autograding@v1
         # run the test cases in .github/classroom/autograding.json
         id: autograding
       - name: grade-moodle-assignment
         # grade the assignment in Moodle, runs even after an error in autograding
         if: always()
         run: |
+          messages=${{ steps.autograding.outputs.Messages }}
+          echo "Messages: $messages"
           grade=${{ steps.autograding.outputs.Points }}
           parts=(${grade//\// })
           points="points=${parts[0]}"
@@ -40,7 +42,7 @@ jobs:
           template="${reponame/"-${{ github.actor }}"/""}"
           assignment="assignment_name=$template"
           
-          curl -v https://oakshield.ghwalin.ch/moodle/
+          #curl -v https://oakshield.ghwalin.ch/moodle/
           wstoken="wstoken=${{ secrets.MOODLE_TOKEN }}"
           url="${{ vars.MOODLE_URL}}?$wstoken&$wsfunction&$assignment&$user&$points"
           echo $url
