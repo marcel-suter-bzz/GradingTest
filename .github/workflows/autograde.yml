@@ -31,7 +31,7 @@ jobs:
           messages=${{ steps.autograding.outputs.Messages }}
           echo "Messages: $messages"
           grade=${{ steps.autograding.outputs.Points }}
-          echo "Points: $points"
+          echo "Points: $grade"
           parts=(${grade//\// })
           points="points=${parts[0]}"
           user="user_name=${{ github.actor }}"
