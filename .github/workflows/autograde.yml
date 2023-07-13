@@ -28,7 +28,7 @@ jobs:
         # grade the assignment in Moodle, runs even after an error in autograding
         if: always()
         run: |
-          messages=${{ steps.autograding.outputs.Messages }}
+          messages=${{ steps.autograding.outputs.Message }}
           echo "Messages: $messages"
           grade=${{ steps.autograding.outputs.Points }}
           echo "Points: $grade"
