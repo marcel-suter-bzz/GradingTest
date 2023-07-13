@@ -21,7 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         # checkout the content of the repository
-      - uses: marcel-suter-bzz/autograding@v2
+      - uses: marcel-suter-bzz/autograding@v1
         # run the test cases in .github/classroom/autograding.json
         id: autograding
       - name: grade-moodle-assignment
