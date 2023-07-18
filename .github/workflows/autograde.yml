@@ -30,6 +30,8 @@ jobs:
         run: |
           messages=${{ steps.autograding.outputs.Messages }}
           echo "Messages: $messages"
+          feedback=${{ steps.autograding.outputs.Feedback }}
+          echo "Feedback: $feedback"
           grade=${{ steps.autograding.outputs.Points }}
           echo "Points: $grade"
           parts=(${grade//\// })
